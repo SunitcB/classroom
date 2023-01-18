@@ -24,8 +24,6 @@ public class PostRepoImpl implements PostRepo {
 
     @Override
     public List<Post> findAllByAuthor(String srcAuthor) {
-        System.out.println("asdasdasdasdasdsd");
-        System.out.println("posts.stream().filter(x -> x.getAuthor() == srcAuthor).toList( = " + posts.stream().filter(x -> x.getAuthor().equals(srcAuthor)).toList());
         return posts.stream().filter(x -> x.getAuthor().equals(srcAuthor)).toList();
     }
 

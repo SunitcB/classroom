@@ -41,7 +41,6 @@ public class PostServiceImpl implements PostService {
         if (srcAuthor == null) {
             return getAll();
         } else {
-            System.out.println("srcAuthor = " + srcAuthor);
             responseModel.setStatusCode(HttpStatus.OK.value());
             responseModel.setData(postRepo.findAllByAuthor(srcAuthor));
             return responseModel;

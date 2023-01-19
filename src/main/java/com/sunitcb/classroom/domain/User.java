@@ -1,24 +1,26 @@
 package com.sunitcb.classroom.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Post {
+@Table(name="users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String title;
-    private  String content;
-    private String author;
-    @ManyToOne
-    @JsonBackReference
-    private User user;
+    long id;
+    String name;
+    @OneToMany
+    @JsonManagedReference
+    @JoinColumn(name = "user_id")
+    List<Post> posts;
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -30,7 +31,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public ResponseModel getAll() {
         responseModel.setStatusCode(HttpStatus.OK.value());
-        responseModel.setData(postRepo.findAll().stream()
+        responseModel.setData(Stream.of(postRepo.findAll())
                 .map(item -> modelMapper.map(item, PostDTO.class))
                 .collect(Collectors.toList()));
         return responseModel;
@@ -50,30 +51,30 @@ public class PostServiceImpl implements PostService {
     @Override
     public ResponseModel findById(int id) {
         responseModel.setStatusCode(HttpStatus.OK.value());
-        responseModel.setData(modelMapper.map(postRepo.findById(id), PostDTO.class));
+        responseModel.setData(modelMapper.map(postRepo.findById((long)id), PostDTO.class));
         return responseModel;
     }
 
     @Override
     public ResponseModel save(Post post) {
+        postRepo.save(post);
         responseModel.setStatusCode(HttpStatus.OK.value());
-        responseModel.setData(postRepo.save(post));
         responseModel.setMessage("Post has been saved successfully.");
         return responseModel;
     }
 
     @Override
     public ResponseModel update(Post post) {
+        postRepo.save(post);
         responseModel.setStatusCode(HttpStatus.OK.value());
-        responseModel.setData(postRepo.update(post));
         responseModel.setMessage("POST has been updated successfully.");
         return responseModel;
     }
 
     @Override
     public ResponseModel delete(int id) {
+        postRepo.deleteById((long)id);
         responseModel.setStatusCode(HttpStatus.OK.value());
-        responseModel.setData(postRepo.delete(id));
         responseModel.setMessage("Post has been deleted successfully");
         return responseModel;
     }

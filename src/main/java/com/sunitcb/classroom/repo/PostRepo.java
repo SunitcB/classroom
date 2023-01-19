@@ -1,14 +1,10 @@
 package com.sunitcb.classroom.repo;
 
 import com.sunitcb.classroom.domain.Post;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface PostRepo {
-    List<Post> findAll();
+public interface PostRepo extends CrudRepository<Post, Long> {
     List<Post> findAllByAuthor(String srcAuthor);
-    Post findById(int id);
-    boolean save(Post post);
-    boolean update(Post post);
-    boolean delete(int id);
 }

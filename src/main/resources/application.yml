@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: spring-data-demo-1
+  datasource:
+    password: postgrespw
+    url: jdbc:postgresql://localhost:32769/postgres
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+    defer-datasource-initialization: true
+    generate-ddl: true
+  sql:
+     init:
+      mode: always
+server:
+  port: 8090
+
+
+#  spring:
+#    application:
+#      name: spring-data-demo-1
+#    datasource:
+#      password: 'Jersey@2023'
+#      url: jdbc:mysql://localhost:3306/classroom
+#      username: root
+#    jpa:
+#      hibernate:
+#        ddl-auto: update
+#      properties:
+#        hibernate:
+#          dialect: org.hibernate.dialect.MySQLDialect
+#          format_sql: true
+#      show-sql: true
+#      defer-datasource-initialization: true
+#      generate-ddl: true
+#    sql:
+#      init:
+#        mode: always
+#  server:
+#    port: 8090

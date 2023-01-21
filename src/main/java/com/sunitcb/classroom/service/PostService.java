@@ -13,10 +13,10 @@ import java.util.List;
 
 public interface PostService {
     ResponseModel getAll();
-    ResponseModel getAllOrWithAuthor(String srcAuthor);
+    ResponseModel getAllOrWithAuthorOrTitle(String searchParam, String searchValue);
     ResponseModel findById(int id);
     ResponseModel save(Post post);
     ResponseModel update(Post post);
     ResponseModel delete(int id);
-
+    ResponseModel getAllWithinTitle();
 }

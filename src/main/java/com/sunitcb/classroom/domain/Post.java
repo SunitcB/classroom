@@ -1,15 +1,18 @@
 package com.sunitcb.classroom.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 
-@Data
+import java.util.List;
+
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 public class Post {
     @Id
@@ -18,7 +21,12 @@ public class Post {
     private String title;
     private  String content;
     private String author;
-    @ManyToOne
+
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "post_id")
+    @JsonManagedReference
+    private List<Comment> comments;
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JsonBackReference
     private User user;
 }

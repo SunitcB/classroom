@@ -31,27 +31,38 @@ public class PostServiceImpl implements PostService {
     @Override
     public ResponseModel getAll() {
         responseModel.setStatusCode(HttpStatus.OK.value());
-        responseModel.setData(Stream.of(postRepo.findAll())
-                .map(item -> modelMapper.map(item, PostDTO.class))
-                .collect(Collectors.toList()));
+//        responseModel.setData(Stream.of(postRepo.findAll())
+//                .map(item -> modelMapper.map(item, PostDTO.class))
+//                .collect(Collectors.toList()));
+        responseModel.setData(postRepo.findAll());
+//        System.out.println("responseModel = " + responseModel);
         return responseModel;
     }
 
     @Override
-    public ResponseModel getAllOrWithAuthor(String srcAuthor) {
-        if (srcAuthor == null) {
+    public ResponseModel getAllOrWithAuthorOrTitle(String searchParam, String searchValue) {
+//        System.out.println("searchParam = " + searchParam);
+        if (searchParam == null) {
             return getAll();
-        } else {
+        } else if (searchParam.equals("author")) {
             responseModel.setStatusCode(HttpStatus.OK.value());
-            responseModel.setData(postRepo.findAllByAuthor(srcAuthor));
+            responseModel.setData(postRepo.findAllByAuthor(searchValue));
             return responseModel;
+        } else if (searchParam.equals("title")) {
+            responseModel.setStatusCode(HttpStatus.OK.value());
+            responseModel.setData(postRepo.findAllByTitle(searchValue));
+            return responseModel;
+        } else if (searchParam.equals("titlesIn")) {
+            return getAllWithinTitle();
+        } else {
+            return getAll();
         }
     }
 
     @Override
     public ResponseModel findById(int id) {
         responseModel.setStatusCode(HttpStatus.OK.value());
-        responseModel.setData(modelMapper.map(postRepo.findById((long)id), PostDTO.class));
+        responseModel.setData(modelMapper.map(postRepo.findById((long) id), PostDTO.class));
         return responseModel;
     }
 
@@ -73,9 +84,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public ResponseModel delete(int id) {
-        postRepo.deleteById((long)id);
+        postRepo.deleteById((long) id);
         responseModel.setStatusCode(HttpStatus.OK.value());
         responseModel.setMessage("Post has been deleted successfully");
+        return responseModel;
+    }
+
+    @Override
+    public ResponseModel getAllWithinTitle() {
+        responseModel.setData(postRepo.findAllByTitleIn("aaa", "bbb"));
+        responseModel.setStatusCode(HttpStatus.OK.value());
         return responseModel;
     }
 }

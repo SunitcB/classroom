@@ -27,8 +27,8 @@ public class PostController {
     }
 
     @GetMapping(value="/posts", headers = "X-API-VERSION=v2")
-    public ResponseEntity<ResponseModel> getAllOrWithAuthors(@RequestParam(required = false) String srcAuthor) {
-        return ResponseEntity.status(HttpStatus.OK).body(postService.getAllOrWithAuthor(srcAuthor));
+    public ResponseEntity<ResponseModel> getAllOrWithParams(@RequestParam(required = false) String searchParam, @RequestParam(required = false) String searchValue) {
+        return ResponseEntity.status(HttpStatus.OK).body(postService.getAllOrWithAuthorOrTitle(searchParam, searchValue));
     }
 
     @GetMapping("/post/{id}")

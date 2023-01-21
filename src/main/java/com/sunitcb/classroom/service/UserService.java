@@ -10,11 +10,12 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    ResponseModel getAllUsers(boolean filter);
+    ResponseModel getAllUsers(boolean filter, Integer num);
     ResponseModel getUserById(int id);
     ResponseModel saveUser(User user);
     ResponseModel updateUser(User user);
     ResponseModel deleteUser(int id);
     ResponseModel getPostsByUser(int userId);
-    ResponseModel getUsersWithManyPosts();
+    ResponseModel getUsersWithManyPosts(int num);
+    ResponseModel getUserByTraversal(int userId, int postId, int commentId);
 }

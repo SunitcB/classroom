@@ -19,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     String name;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.MERGE)
     @JsonManagedReference
     @JoinColumn(name = "user_id")
     List<Post> posts;

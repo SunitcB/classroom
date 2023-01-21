@@ -16,15 +16,15 @@ public class UserServiceImpl implements UserService {
     private final ResponseModel responseModel;
 
     @Autowired
-    UserServiceImpl(UserRepo userRepo, ResponseModel responseModel){
+    UserServiceImpl(UserRepo userRepo, ResponseModel responseModel) {
         this.userRepo = userRepo;
         this.responseModel = responseModel;
     }
 
     @Override
-    public ResponseModel getAllUsers(boolean filter) {
-        if(filter){
-            responseModel.setData(userRepo.findAllWithMorePosts());
+    public ResponseModel getAllUsers(boolean filter, Integer num) {
+        if (filter) {
+            responseModel.setData(userRepo.findAllWithMorePosts(num));
             responseModel.setStatusCode(HttpStatus.OK.value());
         } else {
             responseModel.setData(userRepo.findAll());
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseModel getUserById(int id) {
-        responseModel.setData(userRepo.findById((long)id).get());
+        responseModel.setData(userRepo.findById((long) id).get());
         responseModel.setStatusCode(HttpStatus.OK.value());
         return responseModel;
     }
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseModel deleteUser(int id) {
-        userRepo.deleteById((long)id);
+        userRepo.deleteById((long) id);
         responseModel.setMessage("User has been deleted successfully.");
         responseModel.setStatusCode(HttpStatus.OK.value());
         return responseModel;
@@ -66,15 +66,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseModel getPostsByUser(int userId) {
-        responseModel.setData(userRepo.findById((long)userId).get().getPosts());
+        responseModel.setData(userRepo.findById((long) userId).get().getPosts());
         responseModel.setStatusCode(HttpStatus.OK.value());
         return responseModel;
     }
 
     @Override
-    public ResponseModel getUsersWithManyPosts() {
-        responseModel.setData(userRepo.findAllWithMorePosts());
+    public ResponseModel getUsersWithManyPosts(int num) {
+        responseModel.setData(userRepo.findAllWithMorePosts(num));
         responseModel.setStatusCode(HttpStatus.OK.value());
+        return responseModel;
+    }
+
+    @Override
+    public ResponseModel getUserByTraversal(int userId, int postId, int commentId) {
+        responseModel.setData(userRepo.findCommentByTraversal(userId, postId, commentId));
+
+        responseModel.setStatusCode(HttpStatus.OK.value());
+        System.out.println(responseModel);
         return responseModel;
     }
 }

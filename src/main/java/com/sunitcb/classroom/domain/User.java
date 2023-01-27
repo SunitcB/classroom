@@ -1,11 +1,11 @@
 package com.sunitcb.classroom.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +23,10 @@ public class User {
     @JsonManagedReference
     @JoinColumn(name = "user_id")
     List<Post> posts;
+    String email;
+    @JsonIgnore
+    String password;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn
+    List<UserRole> roles;
 }

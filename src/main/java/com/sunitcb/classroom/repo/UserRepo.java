@@ -13,4 +13,6 @@ public interface UserRepo extends CrudRepository<User, Long> {
 
     @Query("select c from User u left join u.posts p left join p.comments c where u.id = :userId and p.id = :postId and c.id = :commentId")
     List<Comment> findCommentByTraversal(int userId, int postId, int commentId);
+
+    User findByEmail(String email);
 }

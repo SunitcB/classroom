@@ -24,4 +24,9 @@ public class AuthenticateController {
         LoginRequestDTO loginRequestObj = new LoginRequestDTO(username, password);
         return ResponseEntity.status(HttpStatus.OK).body(loginService.authenticateUser(loginRequestObj));
     }
+
+    @GetMapping("/api/renew")
+    public ResponseEntity<ResponseModel> renewAccessToken(@RequestParam String username) {
+        return ResponseEntity.status(HttpStatus.CONTINUE.value()).body(loginService.renewAccessToken(username));
+    }
 }

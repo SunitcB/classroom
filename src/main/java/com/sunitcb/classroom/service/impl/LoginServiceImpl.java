@@ -41,4 +41,13 @@ public class LoginServiceImpl implements LoginService {
         responseModel.setData(loginResponseObj);
         return responseModel;
     }
+
+    @Override
+    public ResponseModel renewAccessToken(String username) {
+        ResponseModel responseModel = new ResponseModel();
+        responseModel.setData(jwtUtil.getRenewedAccessToken(username));
+        return responseModel;
+    }
+
+
 }

@@ -3,6 +3,7 @@ package com.sunitcb.classroom.service.util;
 import io.jsonwebtoken.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -10,10 +11,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@Service
 public class JwtUtil {
     private final String secret = "top-secret";
-    private final long expiration = 5 * 60 * 60 * 60;
-    //     private final long expiration = 5;
+//    private final long expiration = 5 * 60 * 60 * 60;
+         private final long expiration = 30000;
     private final long refreshExpiration = 5 * 60 * 60 * 60 * 60;
 
     // this wil extract a claim from a token, its used in the methods above to get the username and date
@@ -47,6 +49,7 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("refresh", generateRefreshToken(userDetails.getUsername()));
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -62,7 +65,7 @@ public class JwtUtil {
     }
 
     // Overridden to accommodate the refresh token
-    public String doGenerateToken( String subject) {
+    public String doGenerateToken(String subject) {
         return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(new Date())
@@ -109,9 +112,6 @@ public class JwtUtil {
     }
 
 
-
-
-
     public String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
@@ -121,19 +121,26 @@ public class JwtUtil {
 
 
     public String getUsernameFromToken(String token) {
-        String result = null;
-        try {
-            result = Jwts.parser()
+        String result = Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody()
                     .getSubject();
+        return result;
+    }
+
+    public String getRenewedAccessToken(String username){
+        String newAccessToken = null;
+        try {
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("refresh", generateRefreshToken(username));
+            newAccessToken = doGenerateToken(claims, username);
         } catch (ExpiredJwtException e) {
             System.out.println(e.getMessage());
             throw e;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return result;
+        return newAccessToken;
     }
 }

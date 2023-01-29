@@ -1,5 +1,7 @@
 package com.sunitcb.classroom.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sunitcb.classroom.aspect.ExpiredTokenExceptionHandler;
 import com.sunitcb.classroom.service.impl.ClassroomUserDetailService;
 import com.sunitcb.classroom.service.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -20,6 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
+    private final ObjectMapper objectMapper;
     private final ClassroomUserDetailService classroomUserDetailService;
 
     @Override
@@ -33,7 +36,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.getUsernameFromToken(token);
             } catch (ExpiredJwtException e) { // TODO come back here!
-
+                e.getMessage();
+                ExpiredTokenExceptionHandler exp = new ExpiredTokenExceptionHandler(jwtUtil);
+                response.setContentType("application/json");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write(objectMapper.writeValueAsString(exp.returnRenewedToken(e).getBody()));
+                return;
             }
         }
 
